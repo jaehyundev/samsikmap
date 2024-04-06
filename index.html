@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.2">
+  <title>지도 점 표시</title>
+  <style>
+
+    body{
+        margin: 0;
+    }
+    
+    #map-container {
+      position: relative;
+    }
+
+    .marker {
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
+      position: absolute;
+      cursor: pointer;
+    }
+
+    .memo-popup {
+      display: none;
+      position: absolute;
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;   
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="map-container">
+    <img id="map-image" src="./samsak.PNG" alt="지도">
+    <div id="marker1" class="marker" data-memo="안녕하세요1"></div>
+    <div id="marker2" class="marker" data-memo="안녕하세요2"></div>
+    <div id="marker3" class="marker" data-memo="안녕하세요3"></div>
+  </div>
+
+  <div id="memo-popup" class="memo-popup">
+    <span id="memo-text"></span>
+  </div>
+
+  <script>
+    const locations = [
+      { index: [400, 400], memo: "안녕하세요1" },
+      { index: [425, 125], memo: "안녕하세요2" },
+      { index: [400, 752], memo: "안녕하세요3" }
+    ];
+
+    const memoPopup = document.getElementById('memo-popup');
+    const memoText = document.getElementById('memo-text');
+
+    const markerElements = document.querySelectorAll('.marker');
+    markerElements.forEach((marker, index) => {
+      const { index: position, memo } = locations[index];
+      marker.style.left = position[0] + 'px';
+      marker.style.top = position[1] + 'px';
+
+      marker.addEventListener('click', () => {
+        memoText.textContent = memo;
+        memoPopup.style.left = (position[0] - memoPopup.offsetWidth / 2) + 'px';
+        memoPopup.style.top = (position[1] - memoPopup.offsetHeight / 2) + 'px';
+        memoPopup.style.display = 'block';
+      });
+    });
+
+    // 클릭 이벤트를 document에 추가하여 메모 팝업을 닫습니다.
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      // 클릭한 요소가 메모 팝업이 아니면 메모 팝업을 닫습니다.
+      if (!target.matches('.marker') && !target.matches('.memo-popup')) {
+        memoPopup.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
